@@ -1,5 +1,5 @@
 project('CppOpenGLTest', ['cpp', 'c'],
-        version : '1.0.0',
+        version : '0.0.1',
         default_options : ['warning_level=2', 'cpp_std=c++20'])
 
 # Dependencies
@@ -16,8 +16,8 @@ shader_dir = include_directories('ShaderFiles/')
 # Files included add more .cpp things here >:3
 sources = files(
     'src/main.cpp',
-    'src/ShaderLoader.cpp',
-    'src/ShaderLoader.h',
+    'src/ShaderUtils.cpp',
+    'src/ShaderUtils.h',
 )
 
 # Seems to be the holy grail of what to actually include n stuff.

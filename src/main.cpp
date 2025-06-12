@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-#include "ShaderLoader.h"
+#include "ShaderUtils.h"
 
 // Following this https://learnopengl.com/Getting-started/Hello-Window
 // And Clang-Tidy my beloved
@@ -39,31 +39,25 @@ int main() {
     }
 
     // Loader for GLSL vertex shader
-    const std::string vertexCode = LoadShaderFromFile("../ShaderFiles/vertex.vert");
+    const std::string vertexCode = ShaderUtils::LoadFromFile("../ShaderFiles/vertex.vert");
     if (vertexCode.empty()) {
         return -1;
     }
+    unsigned int vertexShader = ShaderUtils::CompileShader(GL_VERTEX_SHADER, vertexCode);
 
-    const char* vertexShaderSource = vertexCode.c_str();
-    const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
-    glCompileShader(vertexShader);
 
     // GLSL Loader for fragment shader
-    const std::string fragmentCode = LoadShaderFromFile("../ShaderFiles/fragment.frag");
+    const std::string fragmentCode = ShaderUtils::LoadFromFile("../ShaderFiles/fragment.frag");
     if (fragmentCode.empty()) {
         return -1;
     }
+    unsigned int fragmentShader = ShaderUtils::CompileShader(GL_VERTEX_SHADER, fragmentCode);
 
-    const char* fragmentShaderSource = fragmentCode.c_str();
-    const unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
-    glCompileShader(fragmentShader);
 
     constexpr float vertices[] = {
         -0.5f, -0.5f, 0.0f,
-         0.5f, -0.5f, 0.0f,
-         0.0f,  0.5f, 0.0f
+        0.5f, -0.5f, 0.0f,
+        0.0f, 0.5f, 0.0f
     };
 
     unsigned int VBO;
@@ -97,4 +91,3 @@ void processInput(GLFWwindow *window) {
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
-
