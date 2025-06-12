@@ -1,7 +1,7 @@
 # OpenGL stuff
 
 So I wanted to learn meson and I wanted to learn vulkan, and so I thought to start with OpenGL before
-vulkan, which is considered a little harder as I've heard.
+vulkan, which is considered a little harder than OpenGl as I've heard.
 
 ### Goals  
 
