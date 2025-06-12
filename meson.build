@@ -10,15 +10,20 @@ opengl_dep = dependency('gl', required : true)
 glad_inc = include_directories('ExternalLibrary/glad/include')
 glad_src = files('ExternalLibrary/glad/src/glad.c')
 
-# Files included add more .cpp things here
+# Shader includes
+shader_dir = include_directories('ShaderFiles/')
+
+# Files included add more .cpp things here >:3
 sources = files(
     'src/main.cpp',
+    'src/ShaderLoader.cpp',
+    'src/ShaderLoader.h',
 )
 
 # Seems to be the holy grail of what to actually include n stuff.
 executable('CppOpenGLTest',
            sources,
            glad_src,
-           include_directories : glad_inc,
+           include_directories : [glad_inc, shader_dir],
            dependencies : [glfw_dep, opengl_dep],
 )
