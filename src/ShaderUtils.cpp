@@ -23,7 +23,7 @@ namespace ShaderUtils {
     }
 
     // This one expects you to provide the type e.g. 'GL_VERTEX_SHADER' or 'GL_FRAGMENT_SHADER'
-    // Not needed anymore just use the create program function
+    // Not needed anymore. Use the create program function
     unsigned int CompileShader(const GLenum type, const std::string &sourceCode) {
         const char *source = sourceCode.c_str();
         const unsigned int shader = glCreateShader(type);
