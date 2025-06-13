@@ -8,6 +8,8 @@
 #include <sstream>
 #include <glad/glad.h>
 
+/// PAUSING THIS UNTIL I FINISH THE TUTORIAL NO MORE SIDE QUESTING!
+
 
 //// This is a mockup of stuff, and I've kinda tested the jetbrains auto suggest to trial and error, so I guess it's partial AI use? :<
 namespace ShaderUtils {
