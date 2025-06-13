@@ -3,6 +3,22 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+
+/*auto vertexShaderSource = "#version 440 core\n"
+    "layout (location = 0) in vec3 aPos;\n"
+    "void main()\n"
+    "{\n"
+    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "}\0";
+
+
+auto fragmentShaderSource = "#version 440 core\n"
+    "out vec4 FragColor;\n"
+    "void main()\n"
+    "{\n"
+    "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "}\0";*/
+
 #include "ShaderUtils.h"
 
 // Following this https://learnopengl.com/Getting-started/Hello-Window
@@ -20,8 +36,10 @@ int main() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
+#ifdef __APPLE__
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+#endif
 
     GLFWwindow *window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "LearnOpenGL", nullptr, nullptr);
     if (window == nullptr) {
@@ -38,24 +56,40 @@ int main() {
         return -1;
     }
 
-    // Loader for GLSL vertex shader
+    /*// Loader for GLSL vertex shader
     const std::string vertexCode = ShaderUtils::LoadFromFile("../ShaderFiles/vertex.vert");
     if (vertexCode.empty()) {
         return -1;
     }
     // Shader Compiler
-    const unsigned int vertexShader = ShaderUtils::CompileShader(GL_VERTEX_SHADER, vertexCode);
+    const unsigned int vertexShader = ShaderUtils::CompileShader(GL_VERTEX_SHADER, vertexCode);*/
 
+    // const unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    // glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
+    // glCompileShader(vertexShader);
 
-    // GLSL Loader for fragment shader
+    // const unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    // glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
+    // glCompileShader(fragmentShader);
+
+    /*// GLSL Loader for fragment shader
     const std::string fragmentCode = ShaderUtils::LoadFromFile("../ShaderFiles/fragment.frag");
     if (fragmentCode.empty()) {
         return -1;
     }
     // Shader Compiler
-    const unsigned int fragmentShader = ShaderUtils::CompileShader(GL_VERTEX_SHADER, fragmentCode);
+    const unsigned int fragmentShader = ShaderUtils::CompileShader(GL_VERTEX_SHADER, fragmentCode);*/
 
-    const unsigned int shaderProgram = glCreateProgram();
+    const unsigned int shaderProgram = ShaderUtils::CreateProgram(
+        "../ShaderFiles/vertex.vert",
+        "../ShaderFiles/fragment.frag"
+    );
+    if (shaderProgram == 0) {
+        return -1;
+    }
+
+
+    /*const unsigned int shaderProgram = glCreateProgram();
 
     // attach and link
     glAttachShader(shaderProgram, vertexShader);
@@ -65,9 +99,9 @@ int main() {
 
     // Clean up shaders
     glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
+    glDeleteShader(fragmentShader);*/
 
-    const float vertices[] = {
+    constexpr float vertices[] = {
         0.5f, 0.5f, 0.0f, // top right
         0.5f, -0.5f, 0.0f, // bottom right
         -0.5f, -0.5f, 0.0f, // bottom left
@@ -80,7 +114,7 @@ int main() {
     };
 
     unsigned int VBO, VAO, EBO;
-    glGenBuffers(1, &VAO);
+    glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glGenBuffers(1, &EBO);
     glBindVertexArray(VAO);
@@ -92,10 +126,10 @@ int main() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), static_cast<void *>(nullptr));
+    glEnableVertexAttribArray(0);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
-
 
 
     ////
@@ -110,7 +144,7 @@ int main() {
 
         glUseProgram(shaderProgram);
         glBindVertexArray(VAO);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
         glfwSwapBuffers(window);
         glfwPollEvents();

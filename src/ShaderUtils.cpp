@@ -13,7 +13,6 @@
 
 //// This is a mockup of stuff, and I've kinda tested the jetbrains auto suggest to trial and error, so I guess it's partial AI use? :<
 namespace ShaderUtils {
-
     // This helper expects you to provide it with the location of a vertex shader or fragment shader
     std::string LoadFromFile(const std::string &filepath) {
         std::ifstream file(filepath);
@@ -27,14 +26,41 @@ namespace ShaderUtils {
     }
 
     // This one expects you to provide the type e.g. 'GL_VERTEX_SHADER' or 'GL_FRAGMENT_SHADER'
-    unsigned int CompileShader(const GLenum type, const std::string& sourceCode) {
-        const char* source = sourceCode.c_str();
+    unsigned int CompileShader(const GLenum type, const std::string &sourceCode) {
+        const char *source = sourceCode.c_str();
         const unsigned int shader = glCreateShader(type);
         glShaderSource(shader, 1, &source, nullptr);
         glCompileShader(shader);
         return shader;
     }
 
+    unsigned int CreateProgram(const std::string &vertexShaderSource, const std::string &fragmentShaderSource) {
+        // Load shaders
+        const std::string vertexCode = LoadFromFile(vertexShaderSource);
+        const std::string fragmentCode = LoadFromFile(fragmentShaderSource);
+
+        if (vertexCode.empty() || fragmentCode.empty()) {
+            std::cerr << "Failed to load shaders" << std::endl;
+            return 0;
+        }
+
+        const unsigned int vertexShader = CompileShader(GL_VERTEX_SHADER, vertexCode);
+        const unsigned int fragmentShader = CompileShader(GL_FRAGMENT_SHADER, fragmentCode);
+        if (vertexShader == 0 || fragmentShader == 0) {
+            std::cerr << "Failed to compile shaders" << std::endl;
+            return 0;
+        }
+
+        const unsigned int program = glCreateProgram();
+        glAttachShader(program, vertexShader);
+        glAttachShader(program, fragmentShader);
+        glLinkProgram(program);
+
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
+
+        return program;
+    }
 } // ShaderUtils
 
 

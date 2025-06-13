@@ -11,5 +11,10 @@ namespace ShaderUtils {
     std::string LoadFromFile(const std::string &filepath);
 
     //// To aid in compiling shaders
-    unsigned int CompileShader(GLenum type, const std::string& sourceCode);
+    unsigned int CompileShader(GLenum type, const std::string &sourceCode);
+
+    unsigned int CreateProgram(
+        const std::string &vertexShaderSource,
+        const std::string &fragmentShaderSource
+    );
 }
