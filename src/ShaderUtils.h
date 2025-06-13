@@ -14,7 +14,7 @@ namespace ShaderUtils {
     unsigned int CompileShader(GLenum type, const std::string &sourceCode);
 
     unsigned int CreateProgram(
-        const std::string &vertexShaderSource,
-        const std::string &fragmentShaderSource
+        const std::string &vertexShaderPath,
+        const std::string &fragmentShaderPath
     );
 }

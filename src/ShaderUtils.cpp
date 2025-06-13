@@ -23,6 +23,7 @@ namespace ShaderUtils {
     }
 
     // This one expects you to provide the type e.g. 'GL_VERTEX_SHADER' or 'GL_FRAGMENT_SHADER'
+    // Not needed anymore just use the create program function
     unsigned int CompileShader(const GLenum type, const std::string &sourceCode) {
         const char *source = sourceCode.c_str();
         const unsigned int shader = glCreateShader(type);
@@ -31,10 +32,12 @@ namespace ShaderUtils {
         return shader;
     }
 
-    unsigned int CreateProgram(const std::string &vertexShaderSource, const std::string &fragmentShaderSource) {
+
+    // This can be called and then have 2 paths assigned to it one being vertex and one being fragment and it should work
+    unsigned int CreateProgram(const std::string &vertexShaderPath, const std::string &fragmentShaderPath) {
         // Load shaders
-        const std::string vertexCode = LoadFromFile(vertexShaderSource);
-        const std::string fragmentCode = LoadFromFile(fragmentShaderSource);
+        const std::string vertexCode = LoadFromFile(vertexShaderPath);
+        const std::string fragmentCode = LoadFromFile(fragmentShaderPath);
 
         if (vertexCode.empty() || fragmentCode.empty()) {
             std::cerr << "Failed to load shaders" << std::endl;
